@@ -18,8 +18,8 @@
       replayButton.click();
     }
 
-    // var sourceList = document.getElementsByTagName("source");
-    // if (sourceList.length == 0) setTimeout(location.reload, 8 * 1000);
+    var ccH5InfoList = document.getElementsByClassName("ccH5Info");
+    if (ccH5InfoList.length && ccH5InfoList[0].innerText.length) setTimeout(location.reload, 1000);
 
     var buttonList = document.getElementsByTagName("button");
 
