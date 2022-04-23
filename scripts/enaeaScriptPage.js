@@ -55,7 +55,7 @@
 
         operationElement.click();
 
-        setTimeout(main, waitSeconds * 1000);
+        setTimeout(main, (waitSeconds + 8 * 60) * 1000);
 
         break;
       }
