@@ -49,5 +49,5 @@
     return;
   };
 
-  setInterval(main, 1000);
+  setInterval(main, 2 * 60 * 1000);
 })();
