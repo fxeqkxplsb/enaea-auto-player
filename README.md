@@ -11,5 +11,4 @@
 
 ## TODO
 
-- [ ] 网络不畅时刷新
-  思路 `document.getElementBy*` `*.* === "*"`
+- [x] 网络不畅时刷新
