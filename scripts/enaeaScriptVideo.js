@@ -9,45 +9,95 @@
 // @grant        none
 // ==/UserScript==
 
-(function () {
-  var main = function () {
-    var i;
+(async function () {
+  // 睡眠函数
+  async function sleep(msecs) {
+    return new Promise(function (resolve, reject) {
+      let uuid = Math.floor(Math.random() * 65536)
+        .toString(16)
+        .toUpperCase()
+        .padStart(4, '0');
+      console.log(`SLEEP#${uuid} START`);
+      setTimeout(function () {
+        resolve(uuid);
+      }, msecs);
+    }).then(function (uuid) {
+      console.log(`SLEEP#${uuid} END`);
+    });
+  }
 
-    var replayButton = document.getElementById("replaybtn");
-    if (replayButton) {
-      replayButton.click();
-    }
+  // 视频元素
+  let videoElementList = document.getElementsByTagName('video');
+  if (videoElementList.length !== 1) {
+    console.log(`PANIC videoElementList.length === ${videoElementList.length}`);
+    return false;
+  }
+  var videoElement = videoElementList[0];
+  console.log(`EXPECTED videoElement`);
 
-    var ccH5InfoList = document.getElementsByClassName("ccH5Info");
-    if (ccH5InfoList.length && ccH5InfoList[0].innerText.length) setTimeout(location.reload, 1000);
-
-    var buttonList = document.getElementsByTagName("button");
-
-    if (buttonList.length) {
-      for (i = 0; i < buttonList.length; ++i) {
-        buttonList[i].click();
-      }
-    }
-    var studyProgressList = document.getElementsByClassName(
-      "cvtb-MCK-CsCt-studyProgress"
+  // 中央暂停键
+  let centerButtonList = document.getElementsByClassName('xgplayer-start');
+  if (centerButtonList.length !== 1) {
+    console.log(
+      `UNDEFINED centerButtonList.length === ${centerButtonList.length}`,
     );
-    var titleList = document.getElementsByClassName(
-      "cvtb-MCK-CsCt-title cvtb-text-ellipsis"
+  } else {
+    let centerButton = centerButtonList[0];
+    console.log(`EXPECTED centerButton`);
+    if (videoElement.paused) centerButton.click();
+  }
+
+  // 边角暂停键
+  let cornerButtonList = document.getElementsByClassName('xgplayer-play');
+  if (cornerButtonList.length !== 1) {
+    console.log(
+      `UNDEFINED cornerButtonList.length === ${cornerButtonList.length}`,
     );
+  } else {
+    let cornerButton = cornerButtonList[0];
+    console.log(`EXPECTED cornerButton`);
+    if (videoElement.paused) cornerButton.click();
+  }
 
-    if (studyProgressList.length) {
-      for (i = 0; i < studyProgressList.length; ++i) {
-        if (studyProgressList[i].innerText !== "100%") {
-          titleList[i].click();
-          break;
-        } else if (i == studyProgressList.length - 1) {
-          window.close();
-        }
-      }
+  // 视频列表
+  let videosUlDivList = document.getElementsByClassName(
+    'cvtb-main-content-kecheng-content',
+  );
+  if (videosUlDivList.length !== 1) {
+    console.log(`PANIC videosUlDivList.length === ${videosUlDivList.length}`);
+    return false;
+  }
+  let videosUlDiv = videosUlDivList[0];
+  if (videosUlDiv.childNodes.length !== 1) {
+    console.log(
+      `PANIC videosUlDiv.childNodes.length === ${videosUlDiv.childNodes.length}`,
+    );
+    return false;
+  }
+  let videosUl = videosUlDiv.childNodes[0];
+  if (!(videosUl.childNodes.length >= 1)) {
+    console.log(
+      `PANIC videosUl.childNodes.length === ${videosUl.childNodes.length}`,
+    );
+    return false;
+  }
+  console.log('EXPECTED videosUl');
+  videoLiList = videosUl.childNodes;
+  console.log('EXPECTED videoLiList');
+
+  // 遍历检查
+  for (let i = 0; i < videoLiList.length; i += 1) {
+    let videoLi = videoLiList[i];
+    if (videoLi.childNodes.length !== 1) {
+      console.log(
+        `PANIC videoLi.childNodes.length === ${videoLi.childNodes.length}`,
+      );
+      return false;
     }
+    console.log(`EXPECTED videoLi = videosUl[${i}]`);
+  }
 
-    return;
-  };
-
-  setInterval(main, 2 * 60 * 1000);
+  // await sleep(1000);
+  // await sleep(1000);
+  // await sleep(1000);
 })();
